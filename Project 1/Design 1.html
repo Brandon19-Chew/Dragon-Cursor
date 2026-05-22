@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Bone Dragon Cursor — The Last Flight | Spaced Words</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      cursor: none !important;
+    }
+
+    body {
+      background: #0e0c07;
+      font-family: 'Palatino', 'Georgia', 'Times New Roman', serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Canvas for dragon + cursor effect */
+    #dragon-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
+    /* Main reading container — WIDE and comfortable */
+    .reading-container {
+      position: relative;
+      max-width: 1300px;
+      width: 90%;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+      z-index: 10;
+      background: transparent;
+    }
+
+    /* Typography for readability */
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 400;
+      color: #eedd99;
+      text-align: center;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      font-family: 'Georgia', serif;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #b98f48;
+      font-style: italic;
+      font-size: 1.2rem;
+      margin-bottom: 2.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* text blocks — EACH WORD gets a small gap via word-spacing + individual margins */
+    .prose p {
+      font-size: 1.18rem;
+      line-height: 1.85;
+      color: #e8dbb8;
+      margin-bottom: 1.8rem;
+      text-align: left;
+      word-spacing: 0.22em;
+      /* subtle gap between words globally */
+      letter-spacing: 0.01em;
+      font-weight: 400;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    /* each word span gets extra margin-right for a bit more breathing room */
+    .word {
+      display: inline-block;
+      margin-right: 0.18em;
+      /* consistent tiny gap after every word */
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.3s ease, margin 0.2s;
+      will-change: transform;
+      white-space: normal;
+    }
+
+    /* first paragraph drop cap */
+    .first-drop::first-letter {
+      float: left;
+      font-size: 4.8em;
+      line-height: 0.75;
+      font-weight: 500;
+      padding-right: 0.22rem;
+      padding-top: 0.1rem;
+      padding-bottom: 0.05rem;
+      color: #e0a343;
+      text-shadow: 0 0 10px rgba(224, 163, 67, 0.5);
+      font-family: 'Georgia', serif;
+    }
+
+    /* no extra dividers */
+    .section-break {
+      display: none;
+    }
+
+    /* elegant hint (fades on mouse move) */
+    .hint {
+      position: fixed;
+      bottom: 1.6rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(30, 20, 8, 0.85);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(200, 131, 42, 0.7);
+      color: #eabb6e;
+      font-size: 0.85rem;
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      pointer-events: none;
+      z-index: 10001;
+      font-family: monospace;
+      letter-spacing: 1px;
+      transition: opacity 1s ease;
+      white-space: nowrap;
+      font-weight: normal;
+    }
+
+    ::selection {
+      background: #c8832a60;
+      color: #ffefc0;
+    }
+
+    @media (max-width: 768px) {
+      .reading-container {
+        width: 94%;
+        padding: 2rem 1.2rem 4rem;
+      }
+
+      h1 {
+        font-size: 2.4rem;
+      }
+
+      .prose p {
+        font-size: 1rem;
+        line-height: 1.75;
+        word-spacing: 0.18em;
+      }
+
+      .word {
+        margin-right: 0.12em;
+      }
+
+      .first-drop::first-letter {
+        font-size: 4.2em;
+      }
+    }
+
+    .atmosphere {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle at 30% 40%, rgba(30, 20, 8, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="dragon-canvas"></canvas>
+  <div class="atmosphere"></div>
+
+  <div class="reading-container">
+    <h1>The Last Dragon's Flight</h1>
+    <div class="subtitle">A tale of bone, wind, and ancient skies</div>
+
+    <div class="prose">
+      <p class="first-drop">In ages long forgotten by mortal tongues, when the sky was a darker canvas and stars burned
+        brighter than the sharpest blade, there existed creatures of such magnificent terror that entire kingdoms were
+        shaped around their migrations. The dragons were not merely beasts of fire and scale — they were living storms,
+        sentient hurricanes wearing the armour of mountains.</p>
+
+      <p>Aerindal, the last of the Cinderwing line, remembered the old paths. She traced them not by map nor by compass,
+        but by the pull of magnetic rivers buried deep within the world's bones, currents invisible to every creature
+        save her kind. Above the Serenthal Peaks she turned west, banking on thermals that rose like invisible pillars
+        from the sun-scorched stone below, her vast wings making no sound but the deep resonant hum that villagers three
+        valleys over would later describe as distant thunder.</p>
+
+      <p>Her scales had long since shifted from the ember-orange of her youth into a deep wine-red, threaded with veins
+        of darkened copper where the centuries had left their mark. Each scar told a story — a crossbow bolt from the
+        Siege of Valdenmoor, a sword slash earned from the great duel above the Drowned Sea. To look upon Aerindal in
+        flight was to read the history of a world, written in broken scales and star-lit breath.</p>
+
+      <p>Now, as the sun fell behind the Teeth of Lorn, Aerindal smelled the iron scent of forgotten magic rising from
+        the rift below. The old bones of the earth whispered, and she answered with a cry that shattered the evening
+        clouds. She was the last living memory of an epoch, a flying mountain of bone and sinew, and the wind itself
+        bowed to her passage. Move your cursor across the page. Watch the skeletal dragon follow your every motion — a
+        ghost of ancient skies, bound to your will. Each wingbeat disturbs the very letters beneath, as if the story
+        itself recognizes the majesty of its subject.</p>
+    </div>
+  </div>
+
+  <div class="hint" id="hint-text">✦ MOVE YOUR CURSOR — THE BONE DRAGON AWAKENS ✦</div>
+
+  <script>
+    (function () {
+      // ---------- CANVAS SETUP ----------
+      const canvas = document.getElementById('dragon-canvas');
+      const ctx = canvas.getContext('2d');
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // mouse position tracking
+      const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      let mouseMoved = false;
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        if (!mouseMoved) {
+          mouseMoved = true;
+          const hintEl = document.getElementById('hint-text');
+          if (hintEl) hintEl.style.opacity = '0';
+        }
+      });
+
+      // ---------- DRAGON SPINE PHYSICS (SMOOTH & FLUID) ----------
+      const SEGMENT_COUNT = 24;
+      const SEGMENT_LEN = 13;
+
+      const segments = [];
+      for (let i = 0; i <= SEGMENT_COUNT; i++) {
+        segments.push({ x: -200, y: -200, angle: 0 });
+      }
+
+      let velocityX = 0, velocityY = 0;
+      let wingFlapPhase = 0;
+      let currentSpeed = 0;
+
+      function updateSpinePhysics() {
+        const dx = mouse.x - segments[0].x;
+        const dy = mouse.y - segments[0].y;
+        velocityX += dx * 0.12;
+        velocityY += dy * 0.12;
+        velocityX *= 0.72;
+        velocityY *= 0.72;
+        segments[0].x += velocityX;
+        segments[0].y += velocityY;
+
+        currentSpeed = Math.hypot(velocityX, velocityY);
+        if (currentSpeed > 0.35) {
+          segments[0].angle = Math.atan2(velocityY, velocityX);
+        }
+
+        for (let i = 1; i <= SEGMENT_COUNT; i++) {
+          const prev = segments[i - 1];
+          const curr = segments[i];
+          const angle = Math.atan2(prev.y - curr.y, prev.x - curr.x);
+          curr.x = prev.x - Math.cos(angle) * SEGMENT_LEN;
+          curr.y = prev.y - Math.sin(angle) * SEGMENT_LEN;
+          curr.angle = angle;
+        }
+
+        wingFlapPhase += 0.11 + currentSpeed * 0.018;
+      }
+
+      // ---------- RENDERING STYLE ----------
+      const BONE_MAIN = '#e2d4b0';
+      const BONE_DARK = '#baa77a';
+      const BONE_SHADOW = '#8f764c';
+      const EYE_GLOW = '#ffb86b';
+
+      // ----- SKULL (detailed, bone dragon style) -----
+      function drawSkull(x, y, angle) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+
+        // neck connectors
+        ctx.beginPath();
+        ctx.strokeStyle = BONE_SHADOW;
+        ctx.lineWidth = 3.2;
+        ctx.moveTo(-8, 0);
+        ctx.lineTo(-18, 0);
+        ctx.stroke();
+
+        // Cranium base
+        ctx.beginPath();
+        ctx.moveTo(20, -4);
+        ctx.bezierCurveTo(28, -16, 20, -26, 10, -26);
+        ctx.bezierCurveTo(-2, -26, -12, -20, -13, -11);
+        ctx.bezierCurveTo(-14, -4, -8, 2, -3, 4);
+        ctx.bezierCurveTo(4, 7, 14, 5, 19, 1);
+        ctx.bezierCurveTo(22, -1, 20, -4, 20, -4);
+        ctx.closePath();
+        ctx.fillStyle = '#2a241a';
+        ctx.fill();
+        ctx.strokeStyle = BONE_MAIN;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // cranial ridges
+        ctx.beginPath(); ctx.moveTo(2, -24); ctx.lineTo(10, -19); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(12, -24); ctx.lineTo(17, -18); ctx.stroke();
+
+        // Horns (three majestic spikes)
+        const horns = [
+          [7, -26, 4, -40, 1, -33],
+          [14, -24, 20, -36, 16, -29],
+          [3, -22, -2, -34, 1, -28]
+        ];
+        horns.forEach(([x1, y1, x2, y2, x3, y3]) => {
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.quadraticCurveTo(x2, y2, x3, y3);
+          ctx.lineTo(x1, y1);
+          ctx.closePath();
+          ctx.fillStyle = '#2f281c';
+          ctx.fill();
+          ctx.strokeStyle = BONE_MAIN;
+          ctx.stroke();
+        });
+
+        // Eye socket
+        ctx.beginPath();
+        ctx.ellipse(7, -13, 6.2, 5.8, -0.1, 0, Math.PI * 2);
+        ctx.fillStyle = '#120e07';
+        ctx.fill();
+        ctx.strokeStyle = BONE_DARK;
+        ctx.stroke();
+
+        // Glowing Eye
+        ctx.beginPath();
+        ctx.ellipse(7, -13, 3.6, 3.2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = EYE_GLOW;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(7, -13, 1.4, 3.2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#000000';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(8.2, -14.2, 0.8, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff3cf';
+        ctx.fill();
+
+        // Upper jaw
+        ctx.beginPath();
+        ctx.moveTo(-2, 4);
+        ctx.lineTo(20, 1);
+        ctx.lineTo(26, 5);
+        ctx.lineTo(28, 3);
+        ctx.lineTo(24, 0);
+        ctx.lineTo(22, 3);
+        ctx.lineTo(18, 1);
+        ctx.bezierCurveTo(12, 2, 5, 6, -2, 4);
+        ctx.closePath();
+        ctx.fillStyle = '#2c2419';
+        ctx.fill();
+        ctx.stroke();
+
+        // upper teeth
+        [[19, 2], [23, 2], [26, 3]].forEach(([tx, ty]) => {
+          ctx.beginPath();
+          ctx.moveTo(tx - 1.8, ty);
+          ctx.lineTo(tx, ty + 7);
+          ctx.lineTo(tx + 1.8, ty);
+          ctx.closePath();
+          ctx.fillStyle = '#e7dbbc';
+          ctx.fill();
+          ctx.strokeStyle = '#ac9a6e';
+          ctx.stroke();
+        });
+
+        // Lower jaw
+        ctx.beginPath();
+        ctx.moveTo(0, 6);
+        ctx.lineTo(20, 5);
+        ctx.lineTo(26, 8);
+        ctx.lineTo(23, 12);
+        ctx.lineTo(17, 9);
+        ctx.lineTo(9, 10);
+        ctx.lineTo(0, 9);
+        ctx.closePath();
+        ctx.fillStyle = '#2b241a';
+        ctx.fill();
+        ctx.stroke();
+
+        // lower teeth
+        [[9, 9], [14, 9], [19, 8]].forEach(([tx, ty]) => {
+          ctx.beginPath();
+          ctx.moveTo(tx - 1.4, ty);
+          ctx.lineTo(tx, ty + 5.5);
+          ctx.lineTo(tx + 1.4, ty);
+          ctx.closePath();
+          ctx.fillStyle = '#e7dbbc';
+          ctx.fill();
+          ctx.stroke();
+        });
+
+        ctx.restore();
+      }
+
+      // Vertebra segment with spikes
+      function drawVertebra(index) {
+        const seg = segments[index];
+        const t = 1 - (index / SEGMENT_COUNT);
+        const radius = 3.2 + t * 5.2;
+        const spikeLen = 6 + t * 13;
+        const spikeWidth = 1.4 + t * 2.2;
+
+        ctx.save();
+        ctx.translate(seg.x, seg.y);
+        ctx.rotate(seg.angle);
+
+        ctx.beginPath();
+        ctx.ellipse(0, 0, radius, radius * 0.7, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#2a241a';
+        ctx.fill();
+        ctx.strokeStyle = BONE_MAIN;
+        ctx.lineWidth = 0.9;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.strokeStyle = BONE_SHADOW;
+        ctx.lineWidth = 0.6;
+        ctx.moveTo(-radius, 0);
+        ctx.lineTo(radius, 0);
+        ctx.stroke();
+
+        for (let side = -1; side <= 1; side += 2) {
+          const rotDir = side * (Math.PI / 2 + 0.2);
+          ctx.save();
+          ctx.rotate(rotDir);
+          ctx.beginPath();
+          ctx.moveTo(-spikeWidth / 2, 0);
+          ctx.lineTo(0, -spikeLen);
+          ctx.lineTo(spikeWidth / 2, 0);
+          ctx.closePath();
+          ctx.fillStyle = '#2f281c';
+          ctx.fill();
+          ctx.strokeStyle = BONE_MAIN;
+          ctx.stroke();
+
+          if (t > 0.4) {
+            ctx.beginPath();
+            ctx.moveTo(spikeWidth * 0.7, -spikeLen * 0.4);
+            ctx.lineTo(spikeWidth * 1.9, -spikeLen * 0.65);
+            ctx.lineTo(spikeWidth * 1.0, -spikeLen * 0.3);
+            ctx.closePath();
+            ctx.fillStyle = BONE_MAIN;
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+        ctx.restore();
+      }
+
+      // Wings with dynamic membrane
+      function drawWingsOnSegment(index) {
+        const seg = segments[index];
+        const flap = Math.sin(wingFlapPhase + index * 0.35);
+        const wingSpread = 68 + Math.abs(flap) * 30;
+        const wingLift = -30 - Math.abs(flap) * 24;
+
+        ctx.save();
+        ctx.translate(seg.x, seg.y);
+        ctx.rotate(seg.angle);
+
+        for (let side = -1; side <= 1; side += 2) {
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(side * wingSpread * 0.28, wingLift * 0.5,
+            side * wingSpread * 0.68, wingLift * 0.85,
+            side * wingSpread, wingLift * 0.45);
+          ctx.bezierCurveTo(side * wingSpread * 0.85, 5,
+            side * 22, 7, 0, 0);
+          ctx.fillStyle = 'rgba(55, 40, 22, 0.65)';
+          ctx.fill();
+          ctx.strokeStyle = BONE_SHADOW;
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+
+          const points = [
+            [side * wingSpread * 0.26, wingLift * 0.48],
+            [side * wingSpread * 0.52, wingLift * 0.79],
+            [side * wingSpread * 0.8, wingLift * 0.55],
+            [side * wingSpread, wingLift * 0.45]
+          ];
+          points.forEach(([px, py]) => {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(px, py);
+            ctx.strokeStyle = BONE_MAIN;
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = '#f1e5c0';
+            ctx.fill();
+          });
+
+          const tipX = side * wingSpread * 0.96;
+          const tipY = wingLift * 0.42;
+          ctx.beginPath();
+          ctx.moveTo(tipX, tipY);
+          ctx.lineTo(tipX + side * 9, tipY - 10);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(tipX, tipY);
+          ctx.lineTo(tipX + side * 6, tipY - 5);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // Tail with blade fin
+      function drawTailFin() {
+        const tailSeg = segments[SEGMENT_COUNT];
+        const prevSeg = segments[SEGMENT_COUNT - 1];
+        const tailAngle = Math.atan2(tailSeg.y - prevSeg.y, tailSeg.x - prevSeg.x);
+        ctx.save();
+        ctx.translate(tailSeg.x, tailSeg.y);
+        ctx.rotate(tailAngle);
+
+        ctx.beginPath();
+        ctx.moveTo(0, -3);
+        ctx.lineTo(22, 0);
+        ctx.lineTo(0, 3);
+        ctx.closePath();
+        ctx.fillStyle = '#2a241a';
+        ctx.fill();
+        ctx.strokeStyle = BONE_MAIN;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(5, -3);
+        ctx.lineTo(24, -16);
+        ctx.lineTo(19, -3);
+        ctx.closePath();
+        ctx.fillStyle = '#262016';
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(5, 3);
+        ctx.lineTo(24, 16);
+        ctx.lineTo(19, 3);
+        ctx.closePath();
+        ctx.fillStyle = '#262016';
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawSpineTrail() {
+        ctx.beginPath();
+        ctx.setLineDash([6, 8]);
+        ctx.strokeStyle = '#ad8b4e';
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.35;
+        for (let i = 0; i < segments.length; i++) {
+          if (i === 0) ctx.moveTo(segments[i].x, segments[i].y);
+          else ctx.lineTo(segments[i].x, segments[i].y);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+      }
+
+      function drawAuraGlow() {
+        const headX = segments[0].x, headY = segments[0].y;
+        const rad = 110 + currentSpeed * 6;
+        const gradient = ctx.createRadialGradient(headX, headY, 8, headX, headY, rad);
+        gradient.addColorStop(0, 'rgba(220, 150, 50, 0.14)');
+        gradient.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(headX, headY, rad, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // ---------- WORD DISTORTION (with extra gap preserved) ----------
+      const wordElements = [];
+      function collectWordSpans() {
+        const paragraphs = document.querySelectorAll('.prose p');
+        paragraphs.forEach(p => {
+          const rawText = p.textContent;
+          p.innerHTML = '';
+          // split by spaces but keep spaces as separate tokens? we want each word + punctuation as a unit,
+          // but with gap we just use word splitting and preserve spacing via CSS.
+          const words = rawText.split(/(\s+)/);
+          words.forEach(token => {
+            if (token === '') return;
+            // if token is whitespace, we create a space span but we can also just ignore spaces and rely on margin-right
+            // but to preserve structure, we treat each word group.
+            if (token.trim() === '' && token.includes(' ')) {
+              // consecutive spaces: add a plain space span
+              const spaceSpan = document.createElement('span');
+              spaceSpan.className = 'word-space';
+              spaceSpan.textContent = ' ';
+              spaceSpan.style.display = 'inline-block';
+              spaceSpan.style.width = '0.28em';
+              p.appendChild(spaceSpan);
+            } else if (token.trim() !== '') {
+              const span = document.createElement('span');
+              span.className = 'word';
+              span.textContent = token;
+              p.appendChild(span);
+              wordElements.push(span);
+            } else if (token === ' ') {
+              const spaceSpan = document.createElement('span');
+              spaceSpan.className = 'word-space';
+              spaceSpan.textContent = ' ';
+              spaceSpan.style.display = 'inline-block';
+              spaceSpan.style.width = '0.28em';
+              p.appendChild(spaceSpan);
+            }
+          });
+        });
+        // ensure all real word spans captured
+      }
+
+      function updateTextDistortion() {
+        const dragonHeadX = segments[0].x;
+        const dragonHeadY = segments[0].y;
+        const EFFECT_RADIUS = 175;
+        const MAX_TRANSLATE = 70;
+
+        wordElements.forEach(span => {
+          const rect = span.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const dx = centerX - dragonHeadX;
+          const dy = centerY - dragonHeadY;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < EFFECT_RADIUS) {
+            const strength = Math.pow(1 - dist / EFFECT_RADIUS, 1.25);
+            const angle = Math.atan2(dy, dx);
+            const offsetX = Math.cos(angle) * strength * MAX_TRANSLATE;
+            const offsetY = Math.sin(angle) * strength * MAX_TRANSLATE;
+            const perpAngle = angle + Math.PI / 2;
+            const shearX = Math.cos(perpAngle) * strength * 18;
+            const shearY = Math.sin(perpAngle) * strength * 14;
+            const rotate = strength * (dx > 0 ? 10 : -10);
+            const scale = 1 - strength * 0.16;
+            span.style.transform = `translate(${(offsetX + shearX).toFixed(1)}px, ${(offsetY + shearY).toFixed(1)}px) rotate(${rotate.toFixed(1)}deg) scale(${scale.toFixed(2)})`;
+            const r = 225 + Math.floor(strength * 35);
+            const g = 185 - Math.floor(strength * 25);
+            const b = 130 - Math.floor(strength * 35);
+            span.style.color = `rgb(${r}, ${g}, ${b})`;
+            span.style.transition = 'transform 0.07s linear, color 0.08s';
+          } else {
+            span.style.transform = '';
+            span.style.color = '';
+            span.style.transition = 'transform 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1), color 0.4s';
+          }
+        });
+      }
+
+      // ---------- MAIN RENDER LOOP ----------
+      function animate() {
+        updateSpinePhysics();
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawAuraGlow();
+        drawSpineTrail();
+        drawTailFin();
+
+        for (let i = SEGMENT_COUNT - 1; i >= 2; i--) {
+          drawVertebra(i);
+        }
+        drawWingsOnSegment(6);
+        drawWingsOnSegment(5);
+        drawWingsOnSegment(4);
+
+        drawVertebra(3);
+        drawVertebra(2);
+        drawVertebra(1);
+
+        drawSkull(segments[0].x, segments[0].y, segments[0].angle);
+
+        updateTextDistortion();
+
+        requestAnimationFrame(animate);
+      }
+
+      function init() {
+        collectWordSpans();
+        resizeCanvas();
+        segments[0].x = window.innerWidth / 2;
+        segments[0].y = window.innerHeight / 2;
+        for (let i = 1; i <= SEGMENT_COUNT; i++) {
+          segments[i].x = segments[i - 1].x - SEGMENT_LEN;
+          segments[i].y = segments[i - 1].y;
+        }
+        animate();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+
+</html>
